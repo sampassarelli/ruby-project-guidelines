@@ -51,19 +51,18 @@ class CLI
 
             if user_input2 == "Sporting Event".light_blue.bold
                 sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
-                event_names = sporting_events.map { |event| event.event_name }
-                user_event_select = prompt.select ("Please Choose a Sporting Event") do |menu|
-                        menu.choice event_names
-                        menu.choice event_names
-                        menu.choice event_names
-                    end
+                sporting_event_names = sporting_events.map do |sporting_event|
+                    "Event: #{sporting_event.event_name},  City: #{sporting_event.city}, Date: #{sporting_event.date}"                
+                end
+                user_input4 = prompt.select("Please Choose an Event", sporting_event_names, "Exit".red.bold)
+                
+
             elsif user_input2 == "Concert".green.bold
                 concerts = Event.all.select { |event| event.category == "Concert"}
-                user_event_select concert_names = concerts.map { |event| event.event_name }
-                puts concert_names.pro
-                                      
-                    # if user_event_select == concert_names
-                    #     puts 
+                concert_names = concerts.map do |concert|
+                    "Event: #{concert.event_name},  City: #{concert.city}, Date: #{concert.date}"                
+                end
+                user_input3 = prompt.select("Please Choose an Event", concert_names, "Exit".red.bold)
             end
         end
 
@@ -78,10 +77,10 @@ class CLI
         if user_tickets == []
             system "clear"
                 user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
-                    menu.choice "Return to Main Menu".green
+                    menu.choice "Return to Main Menu".green.bold
                 end
                 case user_input1
-                when "Return to Main Menu".green
+                when "Return to Main Menu".green.bold
                     self.main_menu(current_user)
                 end        
         elsif
@@ -89,12 +88,12 @@ class CLI
                 "Event: #{ticket.event_id}, Location: #{ticket.event_id}, Quantity: #{ticket.quantity}"
             end
         end
-        user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red)
+        user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red.bold)
 
         case user_input2
         when ticket_event_details
             puts "this button works"
-        when "Exit".red
+        when "Exit".red.bold
             self.main_menu(current_user) 
         end
     end
