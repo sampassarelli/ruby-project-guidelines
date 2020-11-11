@@ -75,18 +75,28 @@ class CLI
     def self.user_tickets(current_user)
         prompt = TTY::Prompt.new
         user_tickets = Ticket.all.select { |ticket| ticket.user_id == current_user.id }
-        if user_tickets = []
+        if user_tickets == []
             system "clear"
-            puts "It looks like you do not have any tickets yet"
-                sleep 2
-                self.main_menu(current_user)
-                
-        else
+                user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
+                    menu.choice "Return to Main Menu".green
+                end
+                case user_input1
+                when "Return to Main Menu".green
+                    self.main_menu(current_user)
+                end        
+        elsif
             ticket_event_details = user_tickets.map do |ticket|
                 "Event: #{ticket.event_id}, Location: #{ticket.event_id}, Quantity: #{ticket.quantity}"
             end
         end
-        user_input = prompt.select("Please Choose an Event", ticket_event_details)
+        user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red)
+
+        case user_input2
+        when ticket_event_details
+            puts "this button works"
+        when "Exit".red
+            self.main_menu(current_user) 
+        end
     end
 
 

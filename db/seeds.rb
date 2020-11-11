@@ -21,5 +21,5 @@ Ticket.create(user_id: user3.id, event_id: event3.id, price: 1000, quantity: 5)
 Ticket.create(user_id: user4.id, event_id: event4.id, price: 100, quantity: 2)
 Ticket.create(user_id: user5.id, event_id: event5.id, price: 60, quantity: 1)
 Ticket.create(user_id: user1.id, event_id: event5.id, price: 200, quantity: 3)
-Ticket.create(user_id: user4.id, event_id: event.id, price: 200, quantity: 3)
+Ticket.create(user_id: user4.id, event_id: event1.id, price: 200, quantity: 3)
 
