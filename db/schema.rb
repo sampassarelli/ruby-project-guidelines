@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 2020_11_10_181239) do
 
   create_table "events", force: :cascade do |t|
     t.string "event_name"
+    t.string "category"
     t.string "city"
-    t.string "state"
     t.integer "zip"
     t.datetime "date"
     t.datetime "created_at", precision: 6, null: false
@@ -33,8 +33,6 @@ ActiveRecord::Schema.define(version: 2020_11_10_181239) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "password"
-    t.integer "account_balance"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

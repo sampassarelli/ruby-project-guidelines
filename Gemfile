@@ -11,3 +11,4 @@ gem "tty-font"
 gem "pastel"
 gem "tty-cursor"
 gem 'faker', '~> 1.6', '>= 1.6.3'
+gem 'colorize'

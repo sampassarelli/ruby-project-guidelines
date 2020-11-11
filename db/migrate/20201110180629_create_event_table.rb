@@ -2,8 +2,8 @@ class CreateEventTable < ActiveRecord::Migration[6.0]
   def change
     create_table :events do |t|
       t.string :event_name
+      t.string :category
       t.string :city
-      t.string :state
       t.integer :zip
       t.datetime :date
 
