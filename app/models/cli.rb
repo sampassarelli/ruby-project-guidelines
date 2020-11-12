@@ -52,9 +52,18 @@ class CLI
             if user_input2 == "Sporting Event".light_blue.bold
                 sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
                 sporting_event_names = sporting_events.map do |sporting_event|
-                    "Event: #{sporting_event.event_name},  City: #{sporting_event.city}, Date: #{sporting_event.date}"                
+                    "Event: #{sporting_event.event_name}, City: #{sporting_event.city}, Date: #{sporting_event.date}"                
                 end
                 user_input4 = prompt.select("Please Choose an Event", sporting_event_names, "Exit".red.bold)
+
+                case user_input4
+                when sporting_event_names
+                    user_chomp = gets.chomp
+                    self.buy_tickets
+            
+                when "Exit".red.bold
+                    self.events_menu
+                end
                 
 
             elsif user_input2 == "Concert".green.bold
@@ -63,6 +72,13 @@ class CLI
                     "Event: #{concert.event_name},  City: #{concert.city}, Date: #{concert.date}"                
                 end
                 user_input3 = prompt.select("Please Choose an Event", concert_names, "Exit".red.bold)
+
+                case user_input3
+                when concert_names
+                    puts "this button works"
+                when "Exit".red.bold
+                    self.events_menu
+                end
             end
         end
 
@@ -91,11 +107,18 @@ class CLI
         user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red.bold)
 
         case user_input2
-        when ticket_event_details
+        when ticket_event_details.find do |details|
+            details == user_input2
             puts "this button works"
+            end
         when "Exit".red.bold
             self.main_menu(current_user) 
         end
+    end
+
+
+    def self.buy_tickets
+        puts "methods reached here"
     end
 
 
