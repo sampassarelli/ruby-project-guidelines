@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
     has_many :tickets
     has_many :events, through: :tickets
 
+#-------------Set Up User--------------
     def self.setup_user
         system "clear"
         prompt = TTY::Prompt.new
@@ -29,6 +30,7 @@ class User < ActiveRecord::Base
         end
     end
 
+#--------------Create New User--------------
     def self.create_new_user
         puts "Welcome to Raks of Tickets! Please create username:"
         user_name_input = gets.chomp
@@ -36,24 +38,28 @@ class User < ActiveRecord::Base
         if User.find_by("username == ?", user_name_input)
             sleep 1
           puts "Username already taken, please select a different username."
+          sleep 3
           create_new_user
         else
           current_user = User.create(username: user_name_input)
-          sleep 1
+          system "clear"
           puts "New user created! Welcome, #{current_user.username}!"
+          sleep 3
 
         end
         current_user
     end
 
+#--------------Find Existing User -----------------
     def self.find_existing_user
         puts "Please enter username:"
         user_name_input = gets.chomp
         current_user = User.find_by("username == ?", user_name_input)
         if User.all.map { |user| user.username }.include?(user_name_input)
-        sleep 1
+            sleep 1
             system "clear"
             puts "Welcome back, #{current_user.username}!"
+            sleep 2
         else
           sleep 1
           puts "Username not found"

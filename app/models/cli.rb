@@ -10,9 +10,7 @@ class CLI
         main_menu
     end
 
-
-
-
+#--------------Main Menu--------------
     def main_menu
         system "clear"
         prompt = TTY::Prompt.new
@@ -22,7 +20,6 @@ class CLI
             menu.choice "Sign Out".light_red.bold
         end
     
-
         case user_input
         when "Find Tickets".light_blue.bold
             system "clear"
@@ -39,6 +36,7 @@ class CLI
         end
     end
 
+#---------------Events Types Menu---------------
     def events_menu
         prompt = TTY::Prompt.new
         user_input = prompt.select ("SEARCH BY:") do |menu|
@@ -55,55 +53,26 @@ class CLI
                 menu.choice "Sporting Event".light_blue.bold
                 menu.choice "Music".green.bold
                 menu.choice "Performing Arts/Entertainment".white.bold
-                menu.choice "Return to Main Menu"
+                menu.choice "Return to Main Menu".red.bold
             end
 
             if user_input2 == "Sporting Event".light_blue.bold
-                sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
-                
-                sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
-                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
-                end
-                sporting_event_details["Exit".red.bold] = "Exit"
-                user_input4 = prompt.select("Please Choose an Event", sporting_event_details)
-                    if user_input4 == "Exit"
-                        events_menu
-                    else sporting_event_details
-                        buy_tickets(user_input4)
-                    end
-                
-
+                system "clear"
+                sporting_event_menu               
             elsif user_input2 == "Music".green.bold
-                concerts = Event.all.select { |event| event.category == "Music"}
-                concert_details = concerts.each_with_object({}) do |event,hash| 
-                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
-                end
-                concert_details["Exit".red.bold] = "Exit"
-                user_input5 = prompt.select("Please Choose an Event", concert_details)
-                    if user_input5 == "Exit"
-                        events_menu
-                    else concert_details
-                        buy_tickets(user_input5)
-                    end
-                
+                system "clear"
+                music_menu 
             elsif user_input2 == "Performing Arts/Entertainment".white.bold
-                theater_events = Event.all.select { |event| event.category == "Theater"}
-                theater_events_details = theater_events.each_with_object({}) do |event,hash| 
-                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
-                end
-                theater_events_details["Exit".red.bold] = "Exit"
-                user_input6 = prompt.select("Please Choose an Event", theater_events_details)
-                    if user_input6 == "Exit"
-                        events_menu
-                    else theater_events_details
-                        buy_tickets(user_input6)
-                    end
-
-                   
+                system "clear"
+                theater_menu                   
+            elsif user_input2 == "Return to Main Menu".red.bold
+                system "clear"
+                main_menu
             end
         
 
         # when "City".magenta.bold
+        #     system "clear"
         #     user_input5 = 
             
         # when "Zipcode".cyan.bold
@@ -112,6 +81,58 @@ class CLI
         end
     end
 
+    #-------------------Event Category Menus-------------------
+    def sporting_event_menu
+        prompt = TTY::Prompt.new
+        sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
+            sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
+                hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+            end
+            sporting_event_details["Return".red.bold] = "Return"
+            user_input = prompt.select("Please Choose an Event", sporting_event_details)
+                if user_input == "Return"
+                    system "clear"
+                    events_menu
+                else sporting_event_details
+                    buy_tickets(user_input)
+                end    
+    end
+    
+    def music_menu
+        prompt = TTY::Prompt.new
+        concerts = Event.all.select { |event| event.category == "Music"}
+        concert_details = concerts.each_with_object({}) do |event,hash| 
+            hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+        end
+        concert_details["Return".red.bold] = "Return"
+        user_input = prompt.select("Please Choose an Event", concert_details)
+            if user_input == "Return"
+                system "clear"
+                events_menu
+            else concert_details
+                   buy_tickets(user_input)
+            end
+
+    end
+
+    def theater_menu
+        prompt = TTY::Prompt.new
+        theater_events = Event.all.select { |event| event.category == "Theater"}
+            theater_events_details = theater_events.each_with_object({}) do |event,hash| 
+                hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+            end
+            theater_events_details["Return".red.bold] = "Return"
+            user_input = prompt.select("Please Choose an Event", theater_events_details)
+                if user_input == "Return"
+                    system "clear"
+                    events_menu
+                else theater_events_details
+                    buy_tickets(user_input)
+                end
+    end
+
+
+#------------------User Tickets--------------------
     def user_tickets
         prompt = TTY::Prompt.new
         user_tickets = Ticket.all.select { |ticket| ticket.user_id == @current_user.id }
@@ -125,23 +146,66 @@ class CLI
                     main_menu
                 end        
         elsif
-            ticket_event_details = user_tickets.map do |ticket|
-                "Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"
+            user_ticket_details = user_tickets.each_with_object({}) do |ticket,hash| 
+                hash["Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"] = ticket 
             end
-        end
-        user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red.bold)
+            user_ticket_details["Return".red.bold] = "Return"
+            user_input2 = prompt.select("Please Choose an Event", user_ticket_details)
+                if user_input2 == "Return"
+                    system "clear"
+                    main_menu
+                else user_ticket_details
+                    system "clear"
+                    cancel_ticket(user_input2)
+                end
 
-        case user_input2
-        when ticket_event_details.find do |details|
-            details == user_input2
-            puts "this button works"
-            end
-        when "Exit".red.bold
-            main_menu
+
+
+
+
+
+        #     ticket_event_details = user_tickets.map do |ticket|
+        #         "Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"
+        #     end
+        # end
+        # user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Return".red.bold)
+
+        # case user_input2
+        # when ticket_event_details.find do |details|
+        #     details == user_input2
+        #     puts "this button works"
+        #     end
+        # when "Return".red.bold
+        #     main_menu
         end
+    end
+#-------------Delete Ticket Method--------------------
+    def cancel_ticket(ticket)
+        prompt = TTY::Prompt.new
+        puts "Are You Sure You Want to Cancel Your Tickets?".yellow.bold
+        sleep 1
+        user_input = prompt.select ("Please Choose an Option:") do |menu|
+            menu.choice "Yes, Cancel Tickets".light_blue.bold
+            menu.choice "No, Return to Main Menu".red.bold
+            
+        end
+            if user_input == "Yes, Cancel Tickets".light_blue.bold
+                Ticket.delete(ticket.id)
+                sleep 1
+                puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".yellow.bold
+                sleep 3
+                main_menu
+            else
+                main_menu
+            end
+
+
+
+
     end
 
 
+#--------------Buy Ticket Method---------------
     def buy_tickets(event)
         puts "Please select a quantity".yellow.bold
         quantity_input = gets.chomp
@@ -152,6 +216,8 @@ class CLI
         sleep 3
         main_menu
     end
+
+
 
 
 end
