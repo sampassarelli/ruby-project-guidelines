@@ -7,13 +7,13 @@ require "pry"
 
 
 #Activate authentication of user. (New User or Existing User)
-current_user = User.setup_user
-sleep(2.5)
-system "clear"
+# current_user = User.setup_user
+# sleep(2.5)
+# system "clear"
 #When They create user or login, they will have a menu of what their options are 
     # Find Events
     # Your Tickets
-CLI.main_menu(current_user)
+CLI.new.sign_in
 
 
 

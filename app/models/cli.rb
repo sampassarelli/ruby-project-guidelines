@@ -4,8 +4,16 @@ require "colorize"
 
 
 class CLI
+       
+    def sign_in
+        @current_user = User.setup_user
+        main_menu
+    end
 
-    def self.main_menu(current_user)
+
+
+
+    def main_menu
         system "clear"
         prompt = TTY::Prompt.new
         user_input = prompt.select ("Welcome to the Main Menu. Please Choose an Option!") do |menu|
@@ -18,10 +26,10 @@ class CLI
         case user_input
         when "Find Tickets".light_blue.bold
             system "clear"
-            self.events_menu
+            events_menu
         when "Your Tickets".white.bold
             # puts "Your Ticket Works"
-            self.user_tickets(current_user)
+            user_tickets
         when "Exit".light_red.bold
             system "clear"
             puts "Thank you for Using Raks of Tickets. We hope you enjoyed our CLI application!".yellow.bold
@@ -31,7 +39,7 @@ class CLI
         end
     end
 
-    def self.events_menu
+    def events_menu
         prompt = TTY::Prompt.new
         user_input = prompt.select ("Please Select a Search Criterion") do |menu|
             menu.choice "Event Category".light_green.bold
@@ -51,18 +59,22 @@ class CLI
 
             if user_input2 == "Sporting Event".light_blue.bold
                 sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
-                sporting_event_names = sporting_events.map do |sporting_event|
-                    "Event: #{sporting_event.event_name}, City: #{sporting_event.city}, Date: #{sporting_event.date}"                
+                
+                sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
+                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
                 end
-                user_input4 = prompt.select("Please Choose an Event", sporting_event_names, "Exit".red.bold)
-
-                case user_input4
-                when sporting_event_names
-                    user_chomp = gets.chomp
-                    self.buy_tickets
             
-                when "Exit".red.bold
-                    self.events_menu
+                sporting_event_details["Exit".red.bold] = "Exit"
+                             
+                
+                user_input4 = prompt.select("Please Choose an Event", sporting_event_details)
+              
+                if user_input4 == "Exit"
+                    events_menu
+                    
+            
+                else sporting_event_details
+                    buy_tickets(user_input4)
                 end
                 
 
@@ -77,7 +89,7 @@ class CLI
                 when concert_names
                     puts "this button works"
                 when "Exit".red.bold
-                    self.events_menu
+                    events_menu
                 end
             end
         end
@@ -87,9 +99,9 @@ class CLI
         # when "Return to Main Menu"
     end
 
-    def self.user_tickets(current_user)
+    def user_tickets
         prompt = TTY::Prompt.new
-        user_tickets = Ticket.all.select { |ticket| ticket.user_id == current_user.id }
+        user_tickets = Ticket.all.select { |ticket| ticket.user_id == @current_user.id }
         if user_tickets == []
             system "clear"
                 user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
@@ -97,11 +109,11 @@ class CLI
                 end
                 case user_input1
                 when "Return to Main Menu".green.bold
-                    self.main_menu(current_user)
+                    main_menu
                 end        
         elsif
             ticket_event_details = user_tickets.map do |ticket|
-                "Event: #{ticket.event_id}, Location: #{ticket.event_id}, Quantity: #{ticket.quantity}"
+                "Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"
             end
         end
         user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Exit".red.bold)
@@ -112,13 +124,18 @@ class CLI
             puts "this button works"
             end
         when "Exit".red.bold
-            self.main_menu(current_user) 
+            main_menu
         end
     end
 
 
-    def self.buy_tickets
-        puts "methods reached here"
+    def buy_tickets(event)
+        puts "Please select a quantity"
+        quantity_input = gets.chomp
+        Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
+        puts "CONGRATS ON THE TICKET"
+        sleep 3
+        events_menu
     end
 
 
