@@ -19,7 +19,7 @@ class CLI
         user_input = prompt.select ("Welcome to the Main Menu. Please Choose an Option!") do |menu|
             menu.choice "Find Tickets".light_blue.bold
             menu.choice "Your Tickets".white.bold
-            menu.choice "Exit".light_red.bold
+            menu.choice "Sign Out".light_red.bold
         end
     
 
@@ -30,7 +30,7 @@ class CLI
         when "Your Tickets".white.bold
             # puts "Your Ticket Works"
             user_tickets
-        when "Exit".light_red.bold
+        when "Sign Out".light_red.bold
             system "clear"
             puts "Thank you for Using Raks of Tickets. We hope you enjoyed our CLI application!".yellow.bold
             sleep 3.5
@@ -41,11 +41,11 @@ class CLI
 
     def events_menu
         prompt = TTY::Prompt.new
-        user_input = prompt.select ("Please Select a Search Criterion") do |menu|
+        user_input = prompt.select ("SEARCH BY:") do |menu|
             menu.choice "Event Category".light_green.bold
             menu.choice "City".magenta.bold
             menu.choice "Zipcode".cyan.bold
-            menu.choice "Return to Main Menu"
+            menu.choice "Return to Main Menu".red.bold
         end
 
         case user_input
@@ -53,7 +53,8 @@ class CLI
             system "clear"
             user_input2 = prompt.select ("Please Select an Event Type") do |menu|
                 menu.choice "Sporting Event".light_blue.bold
-                menu.choice "Concert".green.bold
+                menu.choice "Music".green.bold
+                menu.choice "Performing Arts/Entertainment".white.bold
                 menu.choice "Return to Main Menu"
             end
 
@@ -63,40 +64,52 @@ class CLI
                 sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
                     hash["Event: #{event.event_name} | City: #{event.city}"] = event 
                 end
-            
                 sporting_event_details["Exit".red.bold] = "Exit"
-                             
-                
                 user_input4 = prompt.select("Please Choose an Event", sporting_event_details)
-              
-                if user_input4 == "Exit"
-                    events_menu
-                    
-            
-                else sporting_event_details
-                    buy_tickets(user_input4)
-                end
+                    if user_input4 == "Exit"
+                        events_menu
+                    else sporting_event_details
+                        buy_tickets(user_input4)
+                    end
                 
 
-            elsif user_input2 == "Concert".green.bold
-                concerts = Event.all.select { |event| event.category == "Concert"}
-                concert_names = concerts.map do |concert|
-                    "Event: #{concert.event_name},  City: #{concert.city}, Date: #{concert.date}"                
+            elsif user_input2 == "Music".green.bold
+                concerts = Event.all.select { |event| event.category == "Music"}
+                concert_details = concerts.each_with_object({}) do |event,hash| 
+                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
                 end
-                user_input3 = prompt.select("Please Choose an Event", concert_names, "Exit".red.bold)
+                concert_details["Exit".red.bold] = "Exit"
+                user_input5 = prompt.select("Please Choose an Event", concert_details)
+                    if user_input5 == "Exit"
+                        events_menu
+                    else concert_details
+                        buy_tickets(user_input5)
+                    end
+                
+            elsif user_input2 == "Performing Arts/Entertainment".white.bold
+                theater_events = Event.all.select { |event| event.category == "Theater"}
+                theater_events_details = theater_events.each_with_object({}) do |event,hash| 
+                    hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+                end
+                theater_events_details["Exit".red.bold] = "Exit"
+                user_input6 = prompt.select("Please Choose an Event", theater_events_details)
+                    if user_input6 == "Exit"
+                        events_menu
+                    else theater_events_details
+                        buy_tickets(user_input6)
+                    end
 
-                case user_input3
-                when concert_names
-                    puts "this button works"
-                when "Exit".red.bold
-                    events_menu
-                end
+                   
             end
-        end
+        
 
         # when "City".magenta.bold
+        #     user_input5 = 
+            
         # when "Zipcode".cyan.bold
-        # when "Return to Main Menu"
+        when "Return to Main Menu".red.bold
+            main_menu
+        end
     end
 
     def user_tickets
@@ -130,12 +143,14 @@ class CLI
 
 
     def buy_tickets(event)
-        puts "Please select a quantity"
+        puts "Please select a quantity".yellow.bold
         quantity_input = gets.chomp
         Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
-        puts "CONGRATS ON THE TICKET"
+        puts "You Have Successfully Purchased #{quantity_input.green.bold} tickets to #{event.event_name}!".yellow.bold
         sleep 3
-        events_menu
+        puts "Tickets Will Be Available in 'Your Tickets'.  Have a Great Time!".light_blue.bold
+        sleep 3
+        main_menu
     end
 
 
