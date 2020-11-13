@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
     has_many :tickets
     has_many :events, through: :tickets
 
-#-------------Set Up User--------------
+#-------------Signin Main Menu--------------
     def self.setup_user
         system "clear"
         prompt = TTY::Prompt.new
@@ -66,6 +66,6 @@ class User < ActiveRecord::Base
           find_existing_user
         end
         current_user
-      end
+    end
 
 end

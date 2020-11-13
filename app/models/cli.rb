@@ -41,8 +41,8 @@ class CLI
         prompt = TTY::Prompt.new
         user_input = prompt.select ("SEARCH BY:") do |menu|
             menu.choice "Event Category".light_green.bold
-            menu.choice "City".magenta.bold
-            menu.choice "Zipcode".cyan.bold
+            menu.choice "City".blue.bold
+            # menu.choice "Zipcode".cyan.bold
             menu.choice "Return to Main Menu".red.bold
         end
 
@@ -52,7 +52,7 @@ class CLI
             user_input2 = prompt.select ("Please Select an Event Type") do |menu|
                 menu.choice "Sporting Event".light_blue.bold
                 menu.choice "Music".green.bold
-                menu.choice "Performing Arts/Entertainment".white.bold
+                menu.choice "Performing Arts/Entertainment".black.bold
                 menu.choice "Return to Main Menu".red.bold
             end
 
@@ -62,20 +62,38 @@ class CLI
             elsif user_input2 == "Music".green.bold
                 system "clear"
                 music_menu 
-            elsif user_input2 == "Performing Arts/Entertainment".white.bold
+            elsif user_input2 == "Performing Arts/Entertainment".black.bold
                 system "clear"
                 theater_menu                   
             elsif user_input2 == "Return to Main Menu".red.bold
                 system "clear"
                 main_menu
             end
-        
 
-        # when "City".magenta.bold
-        #     system "clear"
-        #     user_input5 = 
+        when "City".blue.bold
+            system "clear"
+            cities = Event.all.map { |event| event.city }.uniq
+            user_input3 = prompt.select("Please Choose a City", cities, "Return".red.bold)
+                if user_input3 == "Return".red.bold
+                    system "clear"
+                    events_menu
+                else cities
+                    city_menu(user_input3)
+                end
+            
             
         # when "Zipcode".cyan.bold
+            # system "clear"
+            # zipcodes = Event.all.map { |event| event.city }.uniq
+            # user_input4 = prompt.select("Please Choose a Zipcode", zipcodes, "Return")
+            #     if user_input4 == "Return"
+            #         system "clear"
+            #         events_menu
+            #     else zipcodes
+            #         zipcode_menu(user_input4)
+            #     end
+
+
         when "Return to Main Menu".red.bold
             main_menu
         end
@@ -132,8 +150,30 @@ class CLI
     end
 
 
+#---------------City Menu---------------------
+    def city_menu(city)
+        system "clear"
+        prompt = TTY::Prompt.new
+        city_events = Event.all.select { |event| event.city == city}
+        city_event_details = city_events.each_with_object({}) do |event,hash| 
+            hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+        end
+        city_event_details["Return".red.bold] = "Return"
+        user_input = prompt.select("Please Choose an Event", city_event_details)
+            if user_input == "Return"
+                system "clear"
+                events_menu
+            else city_event_details
+                buy_tickets(user_input)
+            end
+    end    
+
+
+
+
 #------------------User Tickets--------------------
     def user_tickets
+        system "clear"
         prompt = TTY::Prompt.new
         user_tickets = Ticket.all.select { |ticket| ticket.user_id == @current_user.id }
         if user_tickets == []
@@ -147,7 +187,7 @@ class CLI
                 end        
         elsif
             user_ticket_details = user_tickets.each_with_object({}) do |ticket,hash| 
-                hash["Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"] = ticket 
+                hash["Event: #{ticket.event.event_name} | Location: #{ticket.event.city} | Quantity: #{ticket.quantity}"] = ticket 
             end
             user_ticket_details["Return".red.bold] = "Return"
             user_input2 = prompt.select("Please Choose an Event", user_ticket_details)
@@ -158,38 +198,19 @@ class CLI
                     system "clear"
                     cancel_ticket(user_input2)
                 end
-
-
-
-
-
-
-        #     ticket_event_details = user_tickets.map do |ticket|
-        #         "Event: #{ticket.event.event_name}, Location: #{ticket.event.city}, Quantity: #{ticket.quantity}"
-        #     end
-        # end
-        # user_input2 = prompt.select("Please Choose an Event", ticket_event_details, "Return".red.bold)
-
-        # case user_input2
-        # when ticket_event_details.find do |details|
-        #     details == user_input2
-        #     puts "this button works"
-        #     end
-        # when "Return".red.bold
-        #     main_menu
         end
     end
 #-------------Delete Ticket Method--------------------
     def cancel_ticket(ticket)
         prompt = TTY::Prompt.new
-        puts "Are You Sure You Want to Cancel Your Tickets?".yellow.bold
+        puts "What Would You Like To Do With Your Tickets?".yellow.bold
         sleep 1
         user_input = prompt.select ("Please Choose an Option:") do |menu|
-            menu.choice "Yes, Cancel Tickets".light_blue.bold
-            menu.choice "No, Return to Main Menu".red.bold
+            menu.choice "Cancel Tickets".light_blue.bold
+            menu.choice "Return to Main Menu".red.bold
             
         end
-            if user_input == "Yes, Cancel Tickets".light_blue.bold
+            if user_input == "Cancel Tickets".light_blue.bold
                 Ticket.delete(ticket.id)
                 sleep 1
                 puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".yellow.bold
@@ -198,10 +219,6 @@ class CLI
             else
                 main_menu
             end
-
-
-
-
     end
 
 
@@ -210,11 +227,12 @@ class CLI
         puts "Please select a quantity".yellow.bold
         quantity_input = gets.chomp
         Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
-        puts "You Have Successfully Purchased #{quantity_input.green.bold} tickets to #{event.event_name}!".yellow.bold
+        puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".yellow.bold
         sleep 3
         puts "Tickets Will Be Available in 'Your Tickets'.  Have a Great Time!".light_blue.bold
         sleep 3
         main_menu
+#-----NOTE: Need to add function that only integers greater than 1 can be accepted.
     end
 
 
