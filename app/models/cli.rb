@@ -242,9 +242,6 @@ class CLI
 #-----NOTE: Need to add function that only integers greater than 1 can be accepted.
     end
 
-
-
-
 end
 
 
