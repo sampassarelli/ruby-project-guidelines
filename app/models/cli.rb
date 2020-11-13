@@ -255,7 +255,6 @@ class CLI
             end
     end
 
-
 #--------------Buy Ticket Method---------------
     def buy_tickets(event)
         puts "Please select a quantity".yellow.bold
@@ -278,54 +277,4 @@ end
 
 
 
-   # Done # if "Find Events" is selected, show menu of 
-        # Find by Event Type
-        # Find by City 
-        # Find by State (I DONT THINK WE NEED THIS ATTRIBUTE TO SEARCH BY SINCE WE HAVE CITY, STILL OK TO KEEP ON TABLE THOUGH )
-        # Find by Zip
-
-        #if "Find by event type" show menu of 
-            #Sporting Event
-            #Concert
-            #------------THE BELOW CODE CAN BE USED FOR ALL "FIND BY" SELECTIONS -------------
-                #Returns a list of events based on the chosen type
-                   #scroll over the list of events and choose which one you want 
-                   # Once clicked, show how much per ticket (NOT SURE HOW TO DO THIS) and say "Choose Quantity"
-                     # User enters in quantity with a chomp
-                        #Returns a "Thank you for Your Purchase, your Tickets are available in your account"
-
-        #if "Find by City" show menu of cities
-            # Chicago
-            # Milwaukee
-            # St. Louis 
-            # Minneapolis
-            # Indianapolis 
-                #------------THE BELOW CODE CAN BE USED FOR ALL "FIND BY" SELECTIONS------------ 
-                    #Returns a list of events based on the chosen type
-                    #scroll over the list of events and choose which one you want 
-                    # Once clicked, show how much per ticket (NOT SURE HOW TO DO THIS) and say "Choose Quantity"
-                        # User enters in quantity with a chomp
-                            #Returns a "Thank you for Your Purchase, your Tickets are available in your account"
-
-        #if "Find by State" show menu of cities ( I DONT THINK WE NEED THIS ATTRIBUTE TO SEARCH BY SINCE WE HAVE CITY )
-            # Illinois
-            # Wisconsin
-            # Misouri
-            # Minnessota 
-            # Indiana 
-                #------------THE BELOW CODE CAN BE USED FOR ALL "FIND BY" SELECTIONS------------ 
-                    #Returns a list of events based on the chosen type
-                    #scroll over the list of events and choose which one you want 
-                    # Once clicked, show how much per ticket (NOT SURE HOW TO DO THIS) and say "Choose Quantity"
-                        # User enters in quantity with a chomp
-                            #Returns a "Thank you for Your Purchase, your Tickets are available in your account"
-    
-        #if "Find by zip" will need a user input ( I DONT THINK WE NEED THIS ATTRIBUTE TO SEARCH BY SINCE WE HAVE CITY )
-            # USER INPUT (CHOMP)
-                #------------THE BELOW CODE CAN BE USED FOR ALL "FIND BY" SELECTIONS------------ 
-                    #Returns a list of events based on the chosen type 
-                    #If there are no events in that ZIP, you will receive a message "No Results found, please try another zip"
-                    #scroll over the list of events and choose which one you want 
-                    # Once clicked, show how much per ticket (NOT SURE HOW TO DO THIS) and say "Choose Quantity"
-                        # User enters in quantity with a chomp
-                            #Returns a "Thank you for Your Purchase, your Tickets are available in your account"
+   

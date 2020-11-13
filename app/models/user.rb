@@ -82,21 +82,5 @@ class User < ActiveRecord::Base
                 exit!
             end
         end
-            
-        # puts "Please enter username:"
-        # user_name_input = gets.chomp
-        # current_user = User.find_by("username == ?", user_name_input)
-        # if User.all.map { |user| user.username }.include?(user_name_input)
-        #     sleep 1
-            # system "clear"
-            # puts "Welcome back, #{current_user.username}!".light_blue.bold
-            # sleep 2
-            # return current_user
-        # else
-        #   system "clear"
-        #   puts "Username not found".yellow.bold
-        #   self.find_existing_user
-        # end
     end
-
 end
