@@ -37,13 +37,13 @@ class User < ActiveRecord::Base
     
         if User.find_by("username == ?", user_name_input)
             sleep 1
-          puts "Username already taken, please select a different username."
+          puts "Username already taken, please select a different username.".yellow.bold
           sleep 3
           create_new_user
         else
           current_user = User.create(username: user_name_input)
           system "clear"
-          puts "New user created! Welcome, #{current_user.username}!"
+          puts "New user created! Welcome, #{current_user.username}!".light_blue.bold
           sleep 3
 
         end
@@ -58,11 +58,11 @@ class User < ActiveRecord::Base
         if User.all.map { |user| user.username }.include?(user_name_input)
             sleep 1
             system "clear"
-            puts "Welcome back, #{current_user.username}!"
+            puts "Welcome back, #{current_user.username}!".light_blue.bold
             sleep 2
         else
-          sleep 1
-          puts "Username not found"
+          system "clear"
+          puts "Username not found".yellow.bold
           find_existing_user
         end
         current_user

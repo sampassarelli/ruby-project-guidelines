@@ -211,6 +211,7 @@ class CLI
             
         end
             if user_input == "Cancel Tickets".light_blue.bold
+                system "clear"
                 Ticket.delete(ticket.id)
                 sleep 1
                 puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".yellow.bold
@@ -227,9 +228,10 @@ class CLI
         puts "Please select a quantity".yellow.bold
         quantity_input = gets.chomp
         Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
+        sleep 1
         puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".yellow.bold
         sleep 3
-        puts "Tickets Will Be Available in 'Your Tickets'.  Have a Great Time!".light_blue.bold
+        puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
         sleep 3
         main_menu
 #-----NOTE: Need to add function that only integers greater than 1 can be accepted.
