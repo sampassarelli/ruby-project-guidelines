@@ -42,7 +42,8 @@ class CLI
         user_input = prompt.select ("SEARCH BY:") do |menu|
             menu.choice "Event Category".light_green.bold
             menu.choice "City".blue.bold
-            # menu.choice "Zipcode".cyan.bold
+            menu.choice "Date".white.bold
+            menu.choice "Covid Friendly: Outdoor Events Only!!!!".cyan.bold
             menu.choice "Return to Main Menu".red.bold
         end
 
@@ -79,20 +80,24 @@ class CLI
                     events_menu
                 else cities
                     city_menu(user_input3)
-                end
+                end 
             
-            
-        # when "Zipcode".cyan.bold
-            # system "clear"
-            # zipcodes = Event.all.map { |event| event.city }.uniq
-            # user_input4 = prompt.select("Please Choose a Zipcode", zipcodes, "Return")
-            #     if user_input4 == "Return"
-            #         system "clear"
-            #         events_menu
-            #     else zipcodes
-            #         zipcode_menu(user_input4)
-            #     end
-
+        # when "Indoor/Outdoor".cyan.bold
+        when "Covid Friendly: Outdoor Events Only!!!!".cyan.bold
+            system "clear"
+            prompt = TTY::Prompt.new
+            covid_events = Event.all.select { |event| event.location == "Outdoor"}
+            covid_event_details = covid_events.each_with_object({}) do |event,hash| 
+                hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
+            end
+            covid_event_details["Return".red.bold] = "Return"
+            user_input4 = prompt.select("Please Choose an Event", covid_event_details)
+                if user_input4 == "Return"
+                    system "clear"
+                    events_menu
+                else covid_event_details
+                    buy_tickets(user_input4)
+                end   
 
         when "Return to Main Menu".red.bold
             main_menu
@@ -104,7 +109,7 @@ class CLI
         prompt = TTY::Prompt.new
         sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
             sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
-                hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+                hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
             end
             sporting_event_details["Return".red.bold] = "Return"
             user_input = prompt.select("Please Choose an Event", sporting_event_details)
@@ -120,7 +125,7 @@ class CLI
         prompt = TTY::Prompt.new
         concerts = Event.all.select { |event| event.category == "Music"}
         concert_details = concerts.each_with_object({}) do |event,hash| 
-            hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+            hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         concert_details["Return".red.bold] = "Return"
         user_input = prompt.select("Please Choose an Event", concert_details)
@@ -137,7 +142,7 @@ class CLI
         prompt = TTY::Prompt.new
         theater_events = Event.all.select { |event| event.category == "Theater"}
             theater_events_details = theater_events.each_with_object({}) do |event,hash| 
-                hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+                hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
             end
             theater_events_details["Return".red.bold] = "Return"
             user_input = prompt.select("Please Choose an Event", theater_events_details)
@@ -154,9 +159,9 @@ class CLI
     def city_menu(city)
         system "clear"
         prompt = TTY::Prompt.new
-        city_events = Event.all.select { |event| event.city == city}
+        city_events = Event.all.select { |event| event.city == city}.sort
         city_event_details = city_events.each_with_object({}) do |event,hash| 
-            hash["Event: #{event.event_name} | City: #{event.city}"] = event 
+            hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         city_event_details["Return".red.bold] = "Return"
         user_input = prompt.select("Please Choose an Event", city_event_details)

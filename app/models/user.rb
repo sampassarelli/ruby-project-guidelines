@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
             sleep 1
           puts "Username already taken, please select a different username.".yellow.bold
           sleep 3
-          create_new_user
+          self.create_new_user
         else
           current_user = User.create(username: user_name_input)
           system "clear"
@@ -60,12 +60,12 @@ class User < ActiveRecord::Base
             system "clear"
             puts "Welcome back, #{current_user.username}!".light_blue.bold
             sleep 2
+            return current_user
         else
           system "clear"
           puts "Username not found".yellow.bold
-          find_existing_user
+          self.find_existing_user
         end
-        current_user
     end
 
 end

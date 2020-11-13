@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 2020_11_10_181239) do
     t.string "event_name"
     t.string "category"
     t.string "city"
-    t.integer "zip"
-    t.datetime "date"
+    t.string "location"
+    t.string "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2020_11_10_181239) do
   create_table "tickets", force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
-    t.float "price"
     t.integer "quantity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -33,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_181239) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
+    t.string "password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

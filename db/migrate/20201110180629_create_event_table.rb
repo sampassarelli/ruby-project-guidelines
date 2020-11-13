@@ -4,8 +4,8 @@ class CreateEventTable < ActiveRecord::Migration[6.0]
       t.string :event_name
       t.string :category
       t.string :city
-      t.integer :zip
-      t.datetime :date
+      t.string :location
+      t.string :date
 
 
       t.timestamps
