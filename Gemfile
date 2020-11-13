@@ -12,3 +12,5 @@ gem "pastel"
 gem "tty-cursor"
 gem 'faker', '~> 1.6', '>= 1.6.3'
 gem 'colorize'
+gem 'artii', '~> 2.1', '>= 2.1.2'
+gem 'tty-spinner'

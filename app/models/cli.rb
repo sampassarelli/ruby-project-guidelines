@@ -16,7 +16,7 @@ class CLI
         prompt = TTY::Prompt.new
         user_input = prompt.select ("Welcome to the Main Menu. Please Choose an Option!") do |menu|
             menu.choice "Find Tickets".light_blue.bold
-            menu.choice "Your Tickets".white.bold
+            menu.choice "Your Tickets".light_blue.bold
             menu.choice "Sign Out".light_red.bold
         end
     
@@ -24,12 +24,12 @@ class CLI
         when "Find Tickets".light_blue.bold
             system "clear"
             events_menu
-        when "Your Tickets".white.bold
+        when "Your Tickets".light_blue.bold
             # puts "Your Ticket Works"
             user_tickets
         when "Sign Out".light_red.bold
             system "clear"
-            puts "Thank you for Using Raks of Tickets. We hope you enjoyed our CLI application!".yellow.bold
+            puts "Thank you for Using StubMaster. We hope you enjoyed our CLI application!".yellow.bold
             sleep 3.5
             system "clear"
             exit!
@@ -40,30 +40,30 @@ class CLI
     def events_menu
         prompt = TTY::Prompt.new
         user_input = prompt.select ("SEARCH BY:") do |menu|
-            menu.choice "Event Category".light_green.bold
-            menu.choice "City".blue.bold
-            menu.choice "Date".white.bold
-            menu.choice "Covid Friendly: Outdoor Events Only!!!!".cyan.bold
+            menu.choice "Event Category".green.bold
+            menu.choice "City".green.bold
+            menu.choice "Date".green.bold
+            menu.choice "Covid Friendly: Outdoor Events Only!".cyan.bold
             menu.choice "Return to Main Menu".red.bold
         end
 
         case user_input
-        when "Event Category".light_green.bold
+        when "Event Category".green.bold
             system "clear"
             user_input2 = prompt.select ("Please Select an Event Type") do |menu|
                 menu.choice "Sporting Event".light_blue.bold
-                menu.choice "Music".green.bold
-                menu.choice "Performing Arts/Entertainment".black.bold
+                menu.choice "Music".light_blue.bold
+                menu.choice "Performing Arts/Entertainment".light_blue.bold
                 menu.choice "Return to Main Menu".red.bold
             end
 
             if user_input2 == "Sporting Event".light_blue.bold
                 system "clear"
                 sporting_event_menu               
-            elsif user_input2 == "Music".green.bold
+            elsif user_input2 == "Music".light_blue.bold
                 system "clear"
                 music_menu 
-            elsif user_input2 == "Performing Arts/Entertainment".black.bold
+            elsif user_input2 == "Performing Arts/Entertainment".light_blue.bold
                 system "clear"
                 theater_menu                   
             elsif user_input2 == "Return to Main Menu".red.bold
@@ -71,7 +71,7 @@ class CLI
                 main_menu
             end
 
-        when "City".blue.bold
+        when "City".green.bold
             system "clear"
             cities = Event.all.map { |event| event.city }.uniq
             user_input3 = prompt.select("Please Choose a City", cities, "Return".red.bold)
@@ -82,8 +82,18 @@ class CLI
                     city_menu(user_input3)
                 end 
             
-        # when "Indoor/Outdoor".cyan.bold
-        when "Covid Friendly: Outdoor Events Only!!!!".cyan.bold
+        when "Date".green.bold
+            system "clear"
+            dates = Event.all.map { |event| event.date }.uniq
+            user_input4 = prompt.select("Please Choose a Date", dates, "Return".red.bold)
+                if user_input4 == "Return".red.bold
+                    system "clear"
+                    events_menu
+                else dates
+                    date_menu(user_input4)
+                end 
+
+        when "Covid Friendly: Outdoor Events Only!".cyan.bold
             system "clear"
             prompt = TTY::Prompt.new
             covid_events = Event.all.select { |event| event.location == "Outdoor"}
@@ -174,6 +184,24 @@ class CLI
     end    
 
 
+#------------------Date Menu--------------------
+    def date_menu(date)
+        system "clear"
+        prompt = TTY::Prompt.new
+        event_dates = Event.all.select { |event| event.date == date}.sort
+        event_date_details = event_dates.each_with_object({}) do |event,hash| 
+            hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
+        end
+        event_date_details["Return".red.bold] = "Return"
+        user_input = prompt.select("Please Choose an Event", event_date_details)
+            if user_input == "Return"
+                system "clear"
+                events_menu
+            else event_date_details
+                buy_tickets(user_input)
+            end
+    end 
+
 
 
 #------------------User Tickets--------------------
@@ -192,7 +220,7 @@ class CLI
                 end        
         elsif
             user_ticket_details = user_tickets.each_with_object({}) do |ticket,hash| 
-                hash["Event: #{ticket.event.event_name} | Location: #{ticket.event.city} | Quantity: #{ticket.quantity}"] = ticket 
+                hash["Event: #{ticket.event.event_name} | Location: #{ticket.event.city} | Date: #{ticket.event.date} | Quantity: #{ticket.quantity}"] = ticket 
             end
             user_ticket_details["Return".red.bold] = "Return"
             user_input2 = prompt.select("Please Choose an Event", user_ticket_details)
@@ -205,7 +233,7 @@ class CLI
                 end
         end
     end
-#-------------Delete Ticket Method--------------------
+#-------------Delete/Update Ticket Method--------------------
     def cancel_ticket(ticket)
         prompt = TTY::Prompt.new
         puts "What Would You Like To Do With Your Tickets?".yellow.bold

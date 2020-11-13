@@ -9,20 +9,20 @@ class User < ActiveRecord::Base
         system "clear"
         prompt = TTY::Prompt.new
         user_input = prompt.select("Do You Have An Account With Us?") do |menu|
-            menu.choice "Sign In".green
-            menu.choice "Create Account".light_blue
-            menu.choice "Exit".red
+            menu.choice "Sign In".green.bold
+            menu.choice "Create Account".green.bold
+            menu.choice "Exit".red.bold
         end
     
-        if user_input == "Create Account".light_blue
+        if user_input == "Create Account".green.bold
             system "clear"
             self.create_new_user
-        elsif user_input == "Sign In".green
+        elsif user_input == "Sign In".green.bold
             system "clear"
             self.find_existing_user
-        else user_input == "Exit".red
+        else user_input == "Exit".red.bold
             system "clear"
-            puts "Thank you for visiting Raks of Tickets. We hope to see you soon!".yellow
+            puts "Thank you for visiting StubMaster. We hope to see you soon!".yellow
             sleep 3
             system "clear"
             exit!
@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     def self.create_new_user
         system "clear"
         prompt = TTY::Prompt.new
-        puts "Welcome to Raks of Tickets! Please create username:"
+        puts "Welcome to StubMaster! Please create username:"
         username_input = prompt.ask("Create a Username:")
         
         if User.find_by("username == ?", username_input)
@@ -78,6 +78,7 @@ class User < ActiveRecord::Base
                 self.create_new_user
             elsif choice == "Exit".red.bold
                 system("clear")
+                puts "Come Back Soon! Love, StubMaster"
                 exit!
             end
         end
