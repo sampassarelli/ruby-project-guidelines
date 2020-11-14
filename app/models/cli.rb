@@ -29,7 +29,7 @@ class CLI
             user_tickets
         when "Sign Out".light_red.bold
             system "clear"
-            puts "Thank you for Using StubMaster. We hope you enjoyed our CLI application!".yellow.bold
+            puts "Thank you for Using StubMaster. We hope you enjoyed our CLI application!".red.bold
             sleep 3.5
             system "clear"
             exit!
@@ -236,7 +236,7 @@ class CLI
 #-------------Delete/Update Ticket Method--------------------
     def cancel_ticket(ticket)
         prompt = TTY::Prompt.new
-        puts "What Would You Like To Do With Your Tickets?".yellow.bold
+        puts "What Would You Like To Do With Your Tickets?".blue.bold
         sleep 1
         user_input = prompt.select ("Please Choose an Option:") do |menu|
             menu.choice "Cancel Tickets".light_blue.bold
@@ -248,7 +248,7 @@ class CLI
                 system "clear"
                 Ticket.delete(ticket.id)
                 sleep 1
-                puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".yellow.bold
+                puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".blue.bold
                 sleep 3
                 main_menu
             elsif user_input == "Update Quantity".light_blue.bold
@@ -262,7 +262,7 @@ class CLI
                         ticket.quantity = updated_quantity_input.to_i
                         ticket.save    
                         sleep 1 
-                        puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".yellow.bold
+                        puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".blue.bold
                         sleep 3
                         main_menu 
                     end
@@ -274,16 +274,16 @@ class CLI
 #--------------Buy Ticket Method---------------
     def buy_tickets(event)
         system "clear"
-        puts "Please select a quantity".yellow.bold
+        puts "Please select a quantity".blue.bold
         quantity_input = gets.chomp
             if quantity_input.to_i <= 0 || !Integer
-                puts "Sorry, that is not a valid amount".yellow.bold
+                puts "Sorry, that is not a valid amount".blue.bold
                 sleep 3
                 buy_tickets(event)
             else
                 Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
                 sleep 1
-                puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".yellow.bold
+                puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".red.bold
                 sleep 3
                 puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
                 sleep 3

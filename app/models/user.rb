@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
             self.find_existing_user
         else user_input == "Exit".red.bold
             system "clear"
-            puts "Thank you for visiting StubMaster. We hope to see you soon!".yellow
+            puts "Thank you for visiting StubMaster. We hope to see you soon!".blue.bold
             sleep 3
             system "clear"
             exit!
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
         
         if User.find_by("username == ?", username_input)
           sleep 1
-          puts "Username already taken, please select a different username.".yellow.bold
+          puts "Username already taken, please select a different username.".blue.bold
           sleep 3
           self.create_new_user
         else
