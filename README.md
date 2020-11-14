@@ -7,7 +7,8 @@ StubMaster is a basic imitation of StubHub/TicketMaster's ticket marketplace. In
   2. Select tickets based on various search options given in the application
   3. Search for outdoor events that are COVID friendly
   4. Add (purchase) tickets and store them
-  5. View all the events they have bought tickets to.
+  5. View all the events they have bought tickets to
+  6. Update the quantity of tickets for an event already stored
   6. Cancel (delete) any tickets to events in their inventory
 
 ### Setup:

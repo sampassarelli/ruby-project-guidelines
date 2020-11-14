@@ -212,10 +212,10 @@ class CLI
         if user_tickets == []
             system "clear"
                 user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
-                    menu.choice "Return to Main Menu".green.bold
+                    menu.choice "Return to Main Menu".red.bold
                 end
                 case user_input1
-                when "Return to Main Menu".green.bold
+                when "Return to Main Menu".red.bold
                     main_menu
                 end        
         elsif
@@ -266,23 +266,29 @@ class CLI
                         sleep 3
                         main_menu 
                     end
-            elsif user_input == "Return to Main Menu".red.bold
+            else user_input == "Return to Main Menu".red.bold
                 main_menu
             end
     end
 
 #--------------Buy Ticket Method---------------
     def buy_tickets(event)
+        system "clear"
         puts "Please select a quantity".yellow.bold
         quantity_input = gets.chomp
-        Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
-        sleep 1
-        puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".yellow.bold
-        sleep 3
-        puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
-        sleep 3
-        main_menu
-#-----NOTE: Need to add function that only integers greater than 1 can be accepted.
+            if quantity_input.to_i <= 0 || !Integer
+                puts "Sorry, that is not a valid amount".yellow.bold
+                sleep 3
+                buy_tickets(event)
+            else
+                Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
+                sleep 1
+                puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".yellow.bold
+                sleep 3
+                puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
+                sleep 3
+                main_menu
+            end
     end
 
 end
