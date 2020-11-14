@@ -240,6 +240,7 @@ class CLI
         sleep 1
         user_input = prompt.select ("Please Choose an Option:") do |menu|
             menu.choice "Cancel Tickets".light_blue.bold
+            menu.choice "Update Quantity".light_blue.bold
             menu.choice "Return to Main Menu".red.bold
             
         end
@@ -250,7 +251,22 @@ class CLI
                 puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".yellow.bold
                 sleep 3
                 main_menu
-            else
+            elsif user_input == "Update Quantity".light_blue.bold
+                system "clear"
+                prompt = TTY::Prompt.new
+                updated_quantity_input = prompt.ask("Please Update Your Ticket Quantity(Minimum 1 ticket):")
+                    if updated_quantity_input.to_i <= 0 || !Integer
+                        puts "Wrong!"
+                        main_menu
+                    else
+                        ticket.quantity = updated_quantity_input.to_i
+                        ticket.save    
+                        sleep 1 
+                        puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".yellow.bold
+                        sleep 3
+                        main_menu 
+                    end
+            elsif user_input == "Return to Main Menu".red.bold
                 main_menu
             end
     end
