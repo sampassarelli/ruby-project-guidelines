@@ -25,8 +25,7 @@ class User < ActiveRecord::Base
             puts "Thank you for visiting StubMaster. We hope to see you soon!".blue.bold
             sleep 3
             system "clear"
-            exit!
-                
+            exit! 
         end
     end
 

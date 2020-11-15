@@ -118,17 +118,17 @@ class CLI
     def sporting_event_menu
         prompt = TTY::Prompt.new
         sporting_events = Event.all.select { |event| event.category == "Sporting Event"}
-            sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
-                hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
-            end
-            sporting_event_details["Return".red.bold] = "Return"
-            user_input = prompt.select("Please Choose an Event", sporting_event_details)
-                if user_input == "Return"
-                    system "clear"
-                    events_menu
-                else sporting_event_details
-                    buy_tickets(user_input)
-                end    
+        sporting_event_details = sporting_events.each_with_object({}) do |event,hash| 
+            hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
+        end
+        sporting_event_details["Return".red.bold] = "Return"
+        user_input = prompt.select("Please Choose an Event", sporting_event_details)
+        if user_input == "Return"
+            system "clear"
+            events_menu
+        else sporting_event_details
+            buy_tickets(user_input)
+        end    
     end
     
     def music_menu
@@ -139,29 +139,28 @@ class CLI
         end
         concert_details["Return".red.bold] = "Return"
         user_input = prompt.select("Please Choose an Event", concert_details)
-            if user_input == "Return"
-                system "clear"
-                events_menu
-            else concert_details
-                   buy_tickets(user_input)
-            end
-
+        if user_input == "Return"
+            system "clear"
+            events_menu
+        else concert_details
+            buy_tickets(user_input)
+        end
     end
 
     def theater_menu
         prompt = TTY::Prompt.new
         theater_events = Event.all.select { |event| event.category == "Theater"}
-            theater_events_details = theater_events.each_with_object({}) do |event,hash| 
-                hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
-            end
-            theater_events_details["Return".red.bold] = "Return"
-            user_input = prompt.select("Please Choose an Event", theater_events_details)
-                if user_input == "Return"
-                    system "clear"
-                    events_menu
-                else theater_events_details
-                    buy_tickets(user_input)
-                end
+        theater_events_details = theater_events.each_with_object({}) do |event,hash| 
+            hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
+        end
+        theater_events_details["Return".red.bold] = "Return"
+        user_input = prompt.select("Please Choose an Event", theater_events_details)
+        if user_input == "Return"
+            system "clear"
+            events_menu
+        else theater_events_details
+            buy_tickets(user_input)
+        end
     end
 
 
@@ -175,12 +174,12 @@ class CLI
         end
         city_event_details["Return".red.bold] = "Return"
         user_input = prompt.select("Please Choose an Event", city_event_details)
-            if user_input == "Return"
-                system "clear"
-                events_menu
-            else city_event_details
-                buy_tickets(user_input)
-            end
+        if user_input == "Return"
+            system "clear"
+            events_menu
+        else city_event_details
+            buy_tickets(user_input)
+        end
     end    
 
 
@@ -194,12 +193,12 @@ class CLI
         end
         event_date_details["Return".red.bold] = "Return"
         user_input = prompt.select("Please Choose an Event", event_date_details)
-            if user_input == "Return"
-                system "clear"
-                events_menu
-            else event_date_details
-                buy_tickets(user_input)
-            end
+        if user_input == "Return"
+            system "clear"
+            events_menu
+        else event_date_details
+            buy_tickets(user_input)
+        end
     end 
 
 
@@ -211,9 +210,9 @@ class CLI
         user_tickets = Ticket.all.select { |ticket| ticket.user_id == @current_user.id }
         if user_tickets == []
             system "clear"
-                user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
-                    menu.choice "Return to Main Menu".red.bold
-                end
+            user_input1 = prompt.select ("It looks like you do not have any tickets yet") do |menu|
+            menu.choice "Return to Main Menu".red.bold
+            end
                 case user_input1
                 when "Return to Main Menu".red.bold
                     main_menu
@@ -224,51 +223,52 @@ class CLI
             end
             user_ticket_details["Return".red.bold] = "Return"
             user_input2 = prompt.select("Please Choose an Event", user_ticket_details)
-                if user_input2 == "Return"
-                    system "clear"
-                    main_menu
-                else user_ticket_details
-                    system "clear"
-                    cancel_ticket(user_input2)
-                end
+            if user_input2 == "Return"
+                system "clear"
+                main_menu
+            else user_ticket_details
+                system "clear"
+                cancel_ticket(user_input2)
+            end
         end
     end
 #-------------Delete/Update Ticket Method--------------------
     def cancel_ticket(ticket)
+        system "clear"
         prompt = TTY::Prompt.new
         puts "What Would You Like To Do With Your Tickets?".blue.bold
         sleep 1
         user_input = prompt.select ("Please Choose an Option:") do |menu|
             menu.choice "Cancel Tickets".light_blue.bold
             menu.choice "Update Quantity".light_blue.bold
-            menu.choice "Return to Main Menu".red.bold
-            
+            menu.choice "Return to Main Menu".red.bold  
         end
-            if user_input == "Cancel Tickets".light_blue.bold
-                system "clear"
-                Ticket.delete(ticket.id)
-                sleep 1
-                puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".blue.bold
-                sleep 3
-                main_menu
-            elsif user_input == "Update Quantity".light_blue.bold
-                system "clear"
-                prompt = TTY::Prompt.new
-                updated_quantity_input = prompt.ask("Please Update Your Ticket Quantity(Minimum 1 ticket):")
-                    if updated_quantity_input.to_i <= 0 || !Integer
-                        puts "Wrong!"
-                        main_menu
-                    else
-                        ticket.quantity = updated_quantity_input.to_i
-                        ticket.save    
-                        sleep 1 
-                        puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".blue.bold
-                        sleep 3
-                        main_menu 
-                    end
-            else user_input == "Return to Main Menu".red.bold
-                main_menu
-            end
+        if user_input == "Cancel Tickets".light_blue.bold
+            system "clear"
+            Ticket.delete(ticket.id)
+            sleep 1
+            puts "Tickets for #{ticket.event.event_name} have been CANCELLED.".blue.bold
+            sleep 3
+            main_menu
+        elsif user_input == "Update Quantity".light_blue.bold
+            system "clear"
+            prompt = TTY::Prompt.new
+            updated_quantity_input = prompt.ask("Please Update Your Ticket Quantity(Minimum 1 ticket):")
+                if updated_quantity_input.to_i <= 0 || !Integer
+                    puts "Sorry, that is not a valid amount.".red.bold
+                    sleep 3
+                    cancel_ticket(ticket)
+                else
+                    ticket.quantity = updated_quantity_input.to_i
+                    ticket.save    
+                    sleep 1 
+                    puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".blue.bold
+                    sleep 3
+                    main_menu 
+                end
+        else user_input == "Return to Main Menu".red.bold
+            main_menu
+        end
     end
 
 #--------------Buy Ticket Method---------------
@@ -276,21 +276,20 @@ class CLI
         system "clear"
         puts "Please select a quantity".blue.bold
         quantity_input = gets.chomp
-            if quantity_input.to_i <= 0 || !Integer
-                puts "Sorry, that is not a valid amount".blue.bold
-                sleep 3
-                buy_tickets(event)
-            else
-                Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
-                sleep 1
-                puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".red.bold
-                sleep 3
-                puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
-                sleep 3
-                main_menu
-            end
+        if quantity_input.to_i <= 0 || !Integer
+            puts "Sorry, that is not a valid amount".blue.bold
+            sleep 3
+            buy_tickets(event)
+        else
+            Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
+            sleep 1
+            puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".red.bold
+            sleep 3
+            puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
+            sleep 3
+            main_menu
+        end
     end
-
 end
 
 
