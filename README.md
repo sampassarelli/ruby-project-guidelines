@@ -29,7 +29,8 @@ StubMaster is a basic imitation of StubHub/TicketMaster's ticket marketplace. In
   5. git@github.com:StevenWuTG/Flatiron-Quest.git
 
 ## Developers:
-Sam Passarelli
-Rakshan Hegde
-Islam Madkaur
+  1. Sam Passarelli
+  2. Rakshan Hegde
+  3. Islam Madkaur
+
 
