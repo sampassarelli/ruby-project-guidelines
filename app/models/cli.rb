@@ -254,17 +254,17 @@ class CLI
             system "clear"
             prompt = TTY::Prompt.new
             updated_quantity_input = prompt.ask("Please Update Your Ticket Quantity(Minimum 1 ticket):")
-                if updated_quantity_input.to_i <= 0 || !Integer
-                    puts "Sorry, that is not a valid amount.".red.bold
-                    sleep 3
-                    cancel_ticket(ticket)
-                else
+                if updated_quantity_input.to_i.positive?
                     ticket.quantity = updated_quantity_input.to_i
                     ticket.save    
                     sleep 1 
                     puts "Your Tickets to #{ticket.event.event_name} Have Been Updated!".blue.bold
                     sleep 3
-                    main_menu 
+                    main_menu
+                else
+                    puts "Sorry, that is not a valid amount.".red.bold
+                    sleep 3
+                    cancel_ticket(ticket)
                 end
         else user_input == "Return to Main Menu".red.bold
             main_menu
@@ -276,26 +276,18 @@ class CLI
         system "clear"
         puts "Please select a quantity".blue.bold
         quantity_input = gets.chomp
-        if quantity_input.to_i <= 0 || !Integer
-            puts "Sorry, that is not a valid amount".blue.bold
-            sleep 3
-            buy_tickets(event)
-        else
+        if quantity_input.to_i.positive?
             Ticket.create(user_id: @current_user.id, event_id: event.id, quantity: quantity_input)
             sleep 1
             puts "You Have Successfully Purchased #{quantity_input} tickets to #{event.event_name}!".red.bold
             sleep 3
             puts "Tickets Will Be Available in 'Your Tickets'. Enjoy the Event!".light_blue.bold
             sleep 3
-            main_menu
+            main_menu            
+        else
+            puts "Sorry, that is not a valid amount".blue.bold
+            sleep 3
+            buy_tickets(event)
         end
     end
-end
-
-
-
-
-
-
-
-   
+end   

@@ -2,7 +2,7 @@ require_relative '../config/environment'
 require "pry"
 require "tty-prompt"
 
-
+system "clear"
 def logo 
     a = Artii::Base.new 
         puts a.asciify('StubMaster!').red.bold
@@ -14,8 +14,4 @@ end
 
 logo
 
-CLI.new.sign_in
-
-
-
-   
+CLI.new.sign_in  
