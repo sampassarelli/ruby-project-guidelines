@@ -74,7 +74,7 @@ class CLI
         when "City".green.bold
             system "clear"
             cities = Event.all.map { |event| event.city }.uniq
-            user_input3 = prompt.select("Please Choose a City", cities, "Return".red.bold)
+            user_input3 = prompt.select("Please Choose a City", cities, "Return".red.bold, per_page: 15)
                 if user_input3 == "Return".red.bold
                     system "clear"
                     events_menu
@@ -85,7 +85,7 @@ class CLI
         when "Date".green.bold
             system "clear"
             dates = Event.all.map { |event| event.date }.uniq
-            user_input4 = prompt.select("Please Choose a Date", dates, "Return".red.bold)
+            user_input4 = prompt.select("Please Choose a Date", dates, "Return".red.bold, per_page: 15)
                 if user_input4 == "Return".red.bold
                     system "clear"
                     events_menu
@@ -101,7 +101,7 @@ class CLI
                 hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
             end
             covid_event_details["Return".red.bold] = "Return"
-            user_input4 = prompt.select("Please Choose an Event", covid_event_details)
+            user_input4 = prompt.select("Please Choose an Event", covid_event_details, per_page: 15)
                 if user_input4 == "Return"
                     system "clear"
                     events_menu
@@ -122,7 +122,7 @@ class CLI
             hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         sporting_event_details["Return".red.bold] = "Return"
-        user_input = prompt.select("Please Choose an Event", sporting_event_details)
+        user_input = prompt.select("Please Choose an Event", sporting_event_details, per_page: 15)
         if user_input == "Return"
             system "clear"
             events_menu
@@ -138,7 +138,7 @@ class CLI
             hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         concert_details["Return".red.bold] = "Return"
-        user_input = prompt.select("Please Choose an Event", concert_details)
+        user_input = prompt.select("Please Choose an Event", concert_details, per_page: 15)
         if user_input == "Return"
             system "clear"
             events_menu
@@ -154,7 +154,7 @@ class CLI
             hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         theater_events_details["Return".red.bold] = "Return"
-        user_input = prompt.select("Please Choose an Event", theater_events_details)
+        user_input = prompt.select("Please Choose an Event", theater_events_details, per_page: 15)
         if user_input == "Return"
             system "clear"
             events_menu
@@ -173,7 +173,7 @@ class CLI
             hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         city_event_details["Return".red.bold] = "Return"
-        user_input = prompt.select("Please Choose an Event", city_event_details)
+        user_input = prompt.select("Please Choose an Event", city_event_details, per_page: 15)
         if user_input == "Return"
             system "clear"
             events_menu
@@ -192,7 +192,7 @@ class CLI
             hash["Event: #{event.event_name} | City: #{event.city} | Date: #{event.date}"] = event 
         end
         event_date_details["Return".red.bold] = "Return"
-        user_input = prompt.select("Please Choose an Event", event_date_details)
+        user_input = prompt.select("Please Choose an Event", event_date_details, per_page: 15)
         if user_input == "Return"
             system "clear"
             events_menu
@@ -222,7 +222,7 @@ class CLI
                 hash["Event: #{ticket.event.event_name} | Location: #{ticket.event.city} | Date: #{ticket.event.date} | Quantity: #{ticket.quantity}"] = ticket 
             end
             user_ticket_details["Return".red.bold] = "Return"
-            user_input2 = prompt.select("Please Choose an Event", user_ticket_details)
+            user_input2 = prompt.select("Please Choose an Event", user_ticket_details, per_page: 15)
             if user_input2 == "Return"
                 system "clear"
                 main_menu
